@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+group = 'pl.kakuszcode'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven { url "https://repo.panda-lang.org/releases" }
+    maven {
+        url "https://repo.goxy.pl"
+    }
+    maven { url "https://storehouse.okaeri.eu/repository/maven-public/" }
+
+}
+
+dependencies {
+    implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:4.0.6'
+    implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:4.0.6'
+    implementation 'org.postgresql:postgresql:42.5.0'
+    implementation 'com.h2database:h2:2.1.214'
+    implementation 'dev.rollczi.litecommands:bukkit:2.6.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    compileOnly "pl.goxy.minecraft:goxy-api:0.6.0"
+    compileOnly 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
+    implementation 'org.mongodb:mongodb-driver-sync:4.7.2'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+}
+compileJava.options.encoding = 'UTF-8'
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+shadowJar {
+    relocate("com.squareup.okhttp3", "pl.kakuszcode.okhttp3")
+    relocate("dev.rollczi.litecommands", "pl.kakuszcode.litecommands")
+    relocate("com.zaxxer.HikariCP", "pl.kakuszcode.HikariCP")
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

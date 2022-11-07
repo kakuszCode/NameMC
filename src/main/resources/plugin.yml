@@ -1,0 +1,6 @@
+name: KakuszNameMC
+version: '${version}'
+main: pl.kakuszcode.namemc.NameMC
+authors: [ robalmeister ]
+softdepend:
+  - "goxy"
