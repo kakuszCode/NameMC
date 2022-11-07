@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'pl.kakuszcode'
-version = '1.0'
+version = '1.1'
 
 repositories {
     mavenCentral()
@@ -30,7 +30,10 @@ dependencies {
     compileOnly "pl.goxy.minecraft:goxy-api:0.6.0"
     compileOnly 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
     implementation 'org.mongodb:mongodb-driver-sync:4.7.2'
-    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.9.1'
+
 }
 compileJava.options.encoding = 'UTF-8'
 def targetJavaVersion = 8
@@ -52,6 +55,8 @@ shadowJar {
     relocate("com.squareup.okhttp3", "pl.kakuszcode.okhttp3")
     relocate("dev.rollczi.litecommands", "pl.kakuszcode.litecommands")
     relocate("com.zaxxer.HikariCP", "pl.kakuszcode.HikariCP")
+    relocate("com.github.benmanes.caffeine", "pl.kakuszcode.caffeine")
+    relocate("org.bstats", "pl.kakuszcode.bstats")
 }
 
 processResources {
