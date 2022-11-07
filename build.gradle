@@ -31,7 +31,7 @@ dependencies {
     compileOnly 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
     implementation 'org.mongodb:mongodb-driver-sync:4.7.2'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
-    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.9.3'
 
 }
