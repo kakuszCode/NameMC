@@ -33,7 +33,7 @@ public class MojangAPIProvider implements UUIDInterface {
             completableFuture.complete(cacheUUID);
              return completableFuture;
         }
-        client.newCall(new Request.Builder().url("https://api.ashcon.app/mojang/v2/user/" + p.getName()).build()).enqueue(
+        client.newCall(new Request.Builder().url("https://api.mojang.com/users/profiles/minecraft/" + p.getName()).build()).enqueue(
                 new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -47,7 +47,7 @@ public class MojangAPIProvider implements UUIDInterface {
                             return;
                         }
                         JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
-                        UUID uuid = UUID.fromString(jsonObject.get("uuid").getAsString());
+                        UUID uuid = UUID.fromString(jsonObject.get("id").getAsString());
                         cacheApiMojang.put(p, uuid);
                         completableFuture.complete(uuid);
                     }
