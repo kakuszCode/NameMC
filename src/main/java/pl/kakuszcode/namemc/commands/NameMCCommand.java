@@ -15,7 +15,8 @@ import pl.kakuszcode.namemc.uuid.UUIDInterface;
 public class NameMCCommand implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) return;
+        if (!(sender instanceof Player)) return;
+        Player player = (Player) sender;
         UserService service = NameMC.getInstance().getUserService();
         if (service.getUsers().containsKey(player.getUniqueId())) {
             player.sendMessage(ChatHelper.fixColor(NameMC.getInstance().getConfiguration().getMessageIsReward()));
