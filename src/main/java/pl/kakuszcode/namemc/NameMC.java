@@ -70,6 +70,7 @@ public final class NameMC extends JavaPlugin {
         }
         userService.load(database);
         getServer().getPluginManager().registerEvents(new NameMCListener(), this);
+        getCommand("namemc").setExecutor(new NameMCCommand());
         new NameMCTask().runTaskTimer(this, 20L, 20L);
     }
 
