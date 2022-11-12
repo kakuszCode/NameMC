@@ -1,7 +1,6 @@
 package pl.kakuszcode.namemc.commands;
 
-import dev.rollczi.litecommands.command.execute.Execute;
-import dev.rollczi.litecommands.command.section.Section;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import pl.kakuszcode.namemc.NameMC;
@@ -13,10 +12,10 @@ import pl.kakuszcode.namemc.user.service.UserService;
 import pl.kakuszcode.namemc.utils.ChatHelper;
 import pl.kakuszcode.namemc.uuid.UUIDInterface;
 
-@Section(route = "namemc", aliases = "nmc")
-public class NameMCCommand {
-    @Execute
-    public void nameMC(Player player) {
+public class NameMCCommand implements CommandExecutor {
+    
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player player)) return;
         UserService service = NameMC.getInstance().getUserService();
         if (service.getUsers().containsKey(player.getUniqueId())) {
             player.sendMessage(ChatHelper.fixColor(NameMC.getInstance().getConfiguration().getMessageIsReward()));
