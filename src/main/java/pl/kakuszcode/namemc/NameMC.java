@@ -1,9 +1,6 @@
 package pl.kakuszcode.namemc;
 
 
-import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
-import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -72,10 +69,6 @@ public final class NameMC extends JavaPlugin {
                 break;
         }
         userService.load(database);
-        LiteCommands<CommandSender> liteCommands = LiteBukkitFactory.builder(getServer(), "kakusz-namemc")
-                .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("&4Błąd: &cMusisz być graczem aby wywołać tą komendę!"))
-                .command(NameMCCommand.class)
-                .register();
         getServer().getPluginManager().registerEvents(new NameMCListener(), this);
         new NameMCTask().runTaskTimer(this, 20L, 20L);
     }
