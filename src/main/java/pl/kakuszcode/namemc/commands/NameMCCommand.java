@@ -1,13 +1,10 @@
 package pl.kakuszcode.namemc.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.api.events.NameMCLikeEvent;
 import pl.kakuszcode.namemc.config.Configuration;
 import pl.kakuszcode.namemc.request.NameMCRequest;
@@ -53,22 +50,20 @@ public class NameMCCommand implements CommandExecutor {
             }
             nameMCRequest.isLiked(uuid)
                     .thenAccept(b -> {
-                        if (!b){
+                        if (!b) {
                             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsNotLiked()));
                             return;
 
                         }
                         NameMCUser nameMCUser = new NameMCUser(player, uuid);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                for (String s : configuration.getCommandsOnAccept()) {
-                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
-                                }
-                                NameMCLikeEvent event = new NameMCLikeEvent(player, uuid);
-                                Bukkit.getPluginManager().callEvent(event);
-                            }
-                        }.runTask(plugin);
+                        plugin.getServer().getScheduler().runTask(plugin,
+                                () -> {
+                                    for (String s : configuration.getCommandsOnAccept()) {
+                                        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), s);
+                                    }
+                                    NameMCLikeEvent event = new NameMCLikeEvent(player, uuid);
+                                    plugin.getServer().getPluginManager().callEvent(event);
+                                });
                         player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsAccept()));
                     }).exceptionally(throwable -> {
                         plugin.getLogger().severe("Błąd: " + throwable);

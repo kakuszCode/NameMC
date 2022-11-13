@@ -3,8 +3,6 @@ package pl.kakuszcode.namemc.database.provider;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
@@ -41,19 +39,17 @@ public class H2Provider implements Database {
 
     @Override
     public void insertNameMCUser(NameMCUser user , JavaPlugin plugin) {
-        new BukkitRunnable() {
-            public void run() {
-                try {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO `NameMCUsers` (`uuid`, `premiumUuid`) VALUES (?, ?)");
-                    ps.setString(1, user.getUniqueId().toString());
-                    ps.setString(2, user.getPremiumUniqueId().toString());
-                    ps.executeUpdate();
-                    ps.close();
-                } catch (SQLException e) {
-                    plugin.getLogger().severe("Problem z bazą danych!" + e);
-                }
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO `NameMCUsers` (`uuid`, `premiumUuid`) VALUES (?, ?)");
+                ps.setString(1, user.getUniqueId().toString());
+                ps.setString(2, user.getPremiumUniqueId().toString());
+                ps.executeUpdate();
+                ps.close();
+            } catch (SQLException e) {
+                plugin.getLogger().severe("Problem z bazą danych!" + e);
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
@@ -26,12 +25,9 @@ public class MongoDBProvider implements Database {
 
     @Override
     public void insertNameMCUser(NameMCUser user, JavaPlugin plugin){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                collection.insertOne(new Document("uniqueId", user.getUniqueId().toString()).append("premiumUniqueId", user.getPremiumUniqueId().toString()));
-            }
-        }.runTaskAsynchronously(plugin);
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            collection.insertOne(new Document("uniqueId", user.getUniqueId().toString()).append("premiumUniqueId", user.getPremiumUniqueId().toString()));
+        });
     }
 
     @Override
