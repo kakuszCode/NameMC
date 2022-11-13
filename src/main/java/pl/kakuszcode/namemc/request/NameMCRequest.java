@@ -2,7 +2,7 @@ package pl.kakuszcode.namemc.request;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
-import pl.kakuszcode.namemc.NameMC;
+import pl.kakuszcode.namemc.config.Configuration;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -10,15 +10,22 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class NameMCRequest {
-    private static final OkHttpClient client = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .callTimeout(10, TimeUnit.SECONDS)
-            .build();
-    public static CompletableFuture<Boolean> isLiked(UUID uuid) {
+    private final OkHttpClient client;
+    private final Configuration configuration;
+
+    public NameMCRequest(Configuration configuration) {
+        this.configuration = configuration;
+        this.client = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .callTimeout(10, TimeUnit.SECONDS)
+                .build();
+    }
+
+    public CompletableFuture<Boolean> isLiked(UUID uuid) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         client.newCall(new Request.Builder()
-               .url("https://api.namemc.com/server/" + NameMC.getInstance().getConfiguration().getServerIP() + "/likes?profile=" + uuid.toString())
+               .url("https://api.namemc.com/server/" + configuration.getServerIP() + "/likes?profile=" + uuid.toString())
                .build())
                .enqueue(new Callback() {
                    @Override

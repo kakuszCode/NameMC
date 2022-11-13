@@ -2,6 +2,7 @@ package pl.kakuszcode.namemc.database.provider;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.database.Database;
@@ -15,11 +16,11 @@ public class PostgreSQLProvider implements Database {
     private Connection connection;
 
     @Override
-    public void connect(String password) {
+    public void connect(String password, JavaPlugin plugin) {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            NameMC.getSl4fjLogger().error("Błąd: ", e);
+            plugin.getLogger().severe("Błąd: " + e);
         }
         HikariConfig config = new HikariConfig();
         String[] passArray = password.split(":");
@@ -36,12 +37,12 @@ public class PostgreSQLProvider implements Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `NameMCUsers` (`uuid` VARCHAR NOT NULL, `premiumUuid` VARCHAR NOT NULL)");
             statement.close();
         } catch (SQLException e) {
-            NameMC.getSl4fjLogger().error("Problem z połączeniem z bazą danych!", e);
+            plugin.getLogger().severe("Problem z połączeniem z bazą danych!" + e);
         }
     }
 
     @Override
-    public void insertNameMCUser(NameMCUser user) {
+    public void insertNameMCUser(NameMCUser user, JavaPlugin plugin) {
         new BukkitRunnable() {
             public void run() {
                 try {
@@ -51,14 +52,14 @@ public class PostgreSQLProvider implements Database {
                     ps.executeUpdate();
                     ps.close();
                 } catch (SQLException e) {
-                    NameMC.getSl4fjLogger().error("Problem z bazą danych!", e);
+                    plugin.getLogger().severe("Problem z bazą danych!" + e);
                 }
             }
-        }.runTaskAsynchronously(NameMC.getInstance());
+        }.runTaskAsynchronously(plugin);
     }
 
     @Override
-    public List<NameMCUser> getNameMCUsers() {
+    public List<NameMCUser> getNameMCUsers(JavaPlugin plugin) {
         List<NameMCUser> users = new ArrayList<>();
         try {
             ResultSet set = connection.prepareStatement("SELECT * FROM `NameMCUsers`").executeQuery();
@@ -67,7 +68,7 @@ public class PostgreSQLProvider implements Database {
                 users.add(user);
             }
         } catch (SQLException e) {
-            NameMC.getSl4fjLogger().error("Błąd:", e);
+            plugin.getLogger().severe("Błąd:" + e);
         }
         return users;
     }

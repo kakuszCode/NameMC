@@ -1,5 +1,6 @@
 package pl.kakuszcode.namemc.user.service;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
@@ -19,7 +20,7 @@ public class UserService {
     public List<UUID> getPendingUsers() {
         return pendingUsers;
     }
-    public void load(Database database) {
-        database.getNameMCUsers().forEach(nameMCUser -> users.put(nameMCUser.getUniqueId(), nameMCUser));
+    public void load(Database database, JavaPlugin plugin) {
+        database.getNameMCUsers(plugin).forEach(nameMCUser -> users.put(nameMCUser.getUniqueId(), nameMCUser));
     }
 }
