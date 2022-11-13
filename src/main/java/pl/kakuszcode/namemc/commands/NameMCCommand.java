@@ -34,7 +34,7 @@ public class NameMCCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (service.getUsers().containsKey(player.getUniqueId())) {
+        if (service.getNameMCUser(player.getUniqueId()).isPresent()) {
             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsReward()));
             return false;
         }
