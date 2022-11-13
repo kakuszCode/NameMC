@@ -38,11 +38,11 @@ public class NameMCCommand implements CommandExecutor {
             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsReward()));
             return false;
         }
-        if (service.getPendingUsers().contains(player.getUniqueId())) {
+        if (service.containsPendingUser(player.getUniqueId())) {
             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsPending()));
             return false;
         }
-        service.getPendingUsers().add(player.getUniqueId());
+        service.addPendingUser(player.getUniqueId());
         UUIDInterface.getUUIDPremiumByPlayer(player).thenAccept(uuid -> {
             if (uuid == null) {
                 player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsNotPremium()));
@@ -75,7 +75,7 @@ public class NameMCCommand implements CommandExecutor {
             player.sendMessage("Błąd! Poinformuj administratora!");
             return null;
         });
-        service.getPendingUsers().remove(player.getUniqueId());
+        service.removePendingUser(player.getUniqueId());
         return false;
     }
 }

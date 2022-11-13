@@ -11,11 +11,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class UserService {
-    private final ConcurrentHashMap<UUID, NameMCUser> users = new ConcurrentHashMap<>();
-    private final List<UUID> pendingUsers = new ArrayList<>();
+    private final ConcurrentHashMap<UUID, NameMCUser> users;
+    private final List<UUID> pendingUsers;
 
-    public List<UUID> getPendingUsers() {
-        return pendingUsers;
+    public UserService() {
+        this.users = new ConcurrentHashMap<>();
+        this.pendingUsers = new ArrayList<>();
+    }
+
+    public boolean containsPendingUser(UUID uuid) {
+        return pendingUsers.contains(uuid);
+    }
+    public void addPendingUser(UUID uuid){
+        pendingUsers.add(uuid);
+    }
+    public void removePendingUser(UUID uuid){
+        pendingUsers.add(uuid);
     }
     public Optional<NameMCUser> getNameMCUser(UUID uuid) {
         return Optional.ofNullable(users.get(uuid));
