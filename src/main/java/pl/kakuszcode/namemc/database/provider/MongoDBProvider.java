@@ -6,13 +6,12 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.logging.Logger;
 
 //this database is shitty
 public class MongoDBProvider implements Database {
@@ -20,7 +19,7 @@ public class MongoDBProvider implements Database {
     private MongoCollection<Document> collection;
 
     @Override
-    public void connect(String password, JavaPlugin plugin) {
+    public void connect(String password, Logger logger) {
         MongoClient client = MongoClients.create(password);
         collection = client.getDatabase("namemc").getCollection("users");
     }
@@ -36,7 +35,7 @@ public class MongoDBProvider implements Database {
     }
 
     @Override
-    public List<NameMCUser> getNameMCUsers(JavaPlugin plugin) {
+    public List<NameMCUser> getNameMCUsers(Logger logger) {
         List<NameMCUser> users = new ArrayList<>();
         if (collection != null) {
             collection.find().forEach(document -> users.add(new NameMCUser(document)));

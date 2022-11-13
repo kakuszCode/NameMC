@@ -4,23 +4,23 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PostgreSQLProvider implements Database {
     private Connection connection;
 
     @Override
-    public void connect(String password, JavaPlugin plugin) {
+    public void connect(String password, Logger logger) {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            plugin.getLogger().severe("Błąd: " + e);
+            logger.severe("Błąd: " + e);
         }
         HikariConfig config = new HikariConfig();
         String[] passArray = password.split(":");
@@ -37,7 +37,7 @@ public class PostgreSQLProvider implements Database {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `NameMCUsers` (`uuid` VARCHAR NOT NULL, `premiumUuid` VARCHAR NOT NULL)");
             statement.close();
         } catch (SQLException e) {
-            plugin.getLogger().severe("Problem z połączeniem z bazą danych!" + e);
+            logger.severe("Problem z połączeniem z bazą danych!" + e);
         }
     }
 
@@ -59,7 +59,7 @@ public class PostgreSQLProvider implements Database {
     }
 
     @Override
-    public List<NameMCUser> getNameMCUsers(JavaPlugin plugin) {
+    public List<NameMCUser> getNameMCUsers(Logger logger) {
         List<NameMCUser> users = new ArrayList<>();
         try {
             ResultSet set = connection.prepareStatement("SELECT * FROM `NameMCUsers`").executeQuery();
@@ -68,7 +68,7 @@ public class PostgreSQLProvider implements Database {
                 users.add(user);
             }
         } catch (SQLException e) {
-            plugin.getLogger().severe("Błąd:" + e);
+            logger.severe("Błąd:" + e);
         }
         return users;
     }
