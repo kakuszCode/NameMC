@@ -1,14 +1,14 @@
 package pl.kakuszcode.namemc.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.api.events.NameMCLikeEvent;
 import pl.kakuszcode.namemc.request.NameMCRequest;
-import pl.kakuszcode.namemc.task.NameMCTask;
 import pl.kakuszcode.namemc.user.NameMCUser;
 import pl.kakuszcode.namemc.user.service.UserService;
 import pl.kakuszcode.namemc.utils.ChatHelper;
@@ -45,7 +45,16 @@ public class NameMCCommand implements CommandExecutor {
 
                         }
                         NameMCUser nameMCUser = new NameMCUser(player, uuid);
-                        NameMCTask.getNamemc().put(player, nameMCUser);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (String s : NameMC.getInstance().getConfiguration().getCommandsOnAccept()) {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
+                                }
+                                NameMCLikeEvent event = new NameMCLikeEvent(player, uuid);
+                                Bukkit.getPluginManager().callEvent(event);
+                            }
+                        }.runTask(NameMC.getInstance());
                     }).exceptionally(throwable -> {
                         NameMC.getSl4fjLogger().error("Błąd: ", throwable);
                         player.sendMessage("Błąd! Poinformuj administratora!");

@@ -5,8 +5,6 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +12,6 @@ import pl.kakuszcode.namemc.commands.NameMCCommand;
 import pl.kakuszcode.namemc.config.Configuration;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.listener.NameMCListener;
-import pl.kakuszcode.namemc.task.NameMCTask;
 import pl.kakuszcode.namemc.user.service.UserService;
 
 import java.io.File;
@@ -71,7 +68,6 @@ public final class NameMC extends JavaPlugin {
         userService.load(database);
         getServer().getPluginManager().registerEvents(new NameMCListener(), this);
         getCommand("namemc").setExecutor(new NameMCCommand());
-        new NameMCTask().runTaskTimer(this, 20L, 20L);
     }
 
     public UserService getUserService() {
