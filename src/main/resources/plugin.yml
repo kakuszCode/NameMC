@@ -6,3 +6,4 @@ softdepend:
   - "goxy"
 commands:
   namemc:
+    aliases: ["nmc"]

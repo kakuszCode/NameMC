@@ -1,7 +1,9 @@
 package pl.kakuszcode.namemc.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.kakuszcode.namemc.NameMC;
 import pl.kakuszcode.namemc.api.events.NameMCLikeEvent;
@@ -14,17 +16,20 @@ import pl.kakuszcode.namemc.uuid.UUIDInterface;
 
 public class NameMCCommand implements CommandExecutor {
     
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) return;
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatHelper.fixColor("&4Błąd: &cMusisz być graczem aby wywołać tą komendę!"));
+            return false;
+        }
         Player player = (Player) sender;
         UserService service = NameMC.getInstance().getUserService();
         if (service.getUsers().containsKey(player.getUniqueId())) {
             player.sendMessage(ChatHelper.fixColor(NameMC.getInstance().getConfiguration().getMessageIsReward()));
-            return;
+            return false;
         }
         if (service.getPendingUsers().contains(player.getUniqueId())) {
             player.sendMessage(ChatHelper.fixColor(NameMC.getInstance().getConfiguration().getMessageIsPending()));
-            return;
+            return false;
         }
         NameMC.getInstance().getUserService().getPendingUsers().add(player.getUniqueId());
         UUIDInterface.getUUIDPremiumByPlayer(player).thenAccept(uuid -> {
@@ -52,5 +57,6 @@ public class NameMCCommand implements CommandExecutor {
             return null;
         });
         NameMC.getInstance().getUserService().getPendingUsers().remove(player.getUniqueId());
+        return false;
     }
 }
