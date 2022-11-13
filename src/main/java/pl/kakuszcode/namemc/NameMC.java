@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import pl.kakuszcode.namemc.commands.NameMCCommand;
 import pl.kakuszcode.namemc.config.Configuration;
 import pl.kakuszcode.namemc.database.Database;
-import pl.kakuszcode.namemc.listener.NameMCListener;
 import pl.kakuszcode.namemc.user.service.UserService;
 
 import java.io.File;
@@ -66,7 +65,6 @@ public final class NameMC extends JavaPlugin {
                 break;
         }
         userService.load(database);
-        getServer().getPluginManager().registerEvents(new NameMCListener(), this);
         getCommand("namemc").setExecutor(new NameMCCommand());
     }
 
