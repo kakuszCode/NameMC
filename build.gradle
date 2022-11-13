@@ -51,7 +51,6 @@ tasks.withType(JavaCompile).configureEach {
 }
 shadowJar {
     relocate("com.squareup.okhttp3", "pl.kakuszcode.okhttp3")
-    relocate("dev.rollczi.litecommands", "pl.kakuszcode.litecommands")
     relocate("com.zaxxer.HikariCP", "pl.kakuszcode.HikariCP")
     relocate("com.github.benmanes.caffeine", "pl.kakuszcode.caffeine")
     relocate("org.bstats", "pl.kakuszcode.bstats")

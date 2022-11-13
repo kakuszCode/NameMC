@@ -18,7 +18,7 @@ public class NameMCRequest {
     public static CompletableFuture<Boolean> isLiked(UUID uuid) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         client.newCall(new Request.Builder()
-               .url("https://api.namemc.com/server/shinemc.pl/likes?profile=" + uuid.toString())
+               .url("https://api.namemc.com/server/" + NameMC.getInstance().getConfiguration().getServerIP() + "/likes?profile=" + uuid.toString())
                .build())
                .enqueue(new Callback() {
                    @Override
