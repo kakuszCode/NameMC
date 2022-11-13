@@ -1,6 +1,5 @@
 package pl.kakuszcode.namemc.user.service;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
@@ -8,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 public class UserService {
     private final ConcurrentHashMap<UUID, NameMCUser> users = new ConcurrentHashMap<>();
@@ -20,7 +20,8 @@ public class UserService {
     public List<UUID> getPendingUsers() {
         return pendingUsers;
     }
-    public void load(Database database, JavaPlugin plugin) {
-        database.getNameMCUsers(plugin).forEach(nameMCUser -> users.put(nameMCUser.getUniqueId(), nameMCUser));
+
+    public void load(Database database, Logger logger) {
+        database.getNameMCUsers(logger).forEach(nameMCUser -> users.put(nameMCUser.getUniqueId(), nameMCUser));
     }
 }
