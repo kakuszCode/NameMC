@@ -3,15 +3,12 @@ package pl.kakuszcode.namemc.user.service;
 import pl.kakuszcode.namemc.database.Database;
 import pl.kakuszcode.namemc.user.NameMCUser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class UserService {
-    private final ConcurrentHashMap<UUID, NameMCUser> users;
+    private final Map<UUID, NameMCUser> users;
     private final List<UUID> pendingUsers;
 
     public UserService() {
