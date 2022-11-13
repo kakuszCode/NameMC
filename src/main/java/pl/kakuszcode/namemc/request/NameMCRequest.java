@@ -21,6 +21,10 @@ public class NameMCRequest {
                 .callTimeout(10, TimeUnit.SECONDS)
                 .build();
     }
+    public void stopRequest(){
+        client.dispatcher().executorService().shutdown();
+        client.connectionPool().evictAll();
+    }
 
     public CompletableFuture<Boolean> isLiked(UUID uuid) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();

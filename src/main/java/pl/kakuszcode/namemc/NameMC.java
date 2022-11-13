@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public final class NameMC extends JavaPlugin {
 
     private Database database;
+    private NameMCRequest nameMCRequest;
 
     @Override
     public void onEnable() {
@@ -38,21 +39,25 @@ public final class NameMC extends JavaPlugin {
         UserService userService = new UserService();
         switch (configuration.getDatabaseEnum()) {
             case H2:
-                database.connect(configuration.getH2Jdbc(),this);
+                database.connect(configuration.getH2Jdbc(),getLogger());
                 break;
             case MYSQL:
-                database.connect(configuration.getMysqlJdbc() + ":" + configuration.getMysqlUsername() + ":" + configuration.getMysqlPassword(),this);
+                database.connect(configuration.getMysqlJdbc() + ":" + configuration.getMysqlUsername() + ":" + configuration.getMysqlPassword(),getLogger());
                 break;
             case MONGODB:
-                database.connect(configuration.getMongodbJdbc(),this);
+                database.connect(configuration.getMongodbJdbc(),getLogger());
                 break;
             case POSTGRESQL:
-                database.connect(configuration.getPostGreSQLJdbc() + ":" + configuration.getPostGreSQLUsername() + ":" + configuration.getPostGreSQLPassword(), this);
+                database.connect(configuration.getPostGreSQLJdbc() + ":" + configuration.getPostGreSQLUsername() + ":" + configuration.getPostGreSQLPassword(), getLogger());
                 break;
         }
-        NameMCRequest nameMCRequest = new NameMCRequest(configuration);
-        userService.load(database, this);
+        nameMCRequest = new NameMCRequest(configuration);
+        userService.load(database, getLogger());
         getCommand("namemc").setExecutor(new NameMCCommand(this, configuration, userService, nameMCRequest));
     }
 
+    @Override
+    public void onDisable() {
+        nameMCRequest.stopRequest();
+    }
 }
