@@ -54,7 +54,8 @@ public class NameMCCommand implements CommandExecutor {
                             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsNotLiked()));
                             return;
                         }
-
+                        NameMCUser nameMCUser = new NameMCUser(player, uuid);
+                        service.addNameMCUser(nameMCUser);
                         plugin.getServer().getScheduler().runTask(plugin, () -> {
                             for (String s : configuration.getCommandsOnAccept()) {
                                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), s);
