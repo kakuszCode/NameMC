@@ -23,12 +23,14 @@ public class UserService {
         pendingUsers.add(uuid);
     }
     public void removePendingUser(UUID uuid){
-        pendingUsers.add(uuid);
+        pendingUsers.remove(uuid);
     }
     public Optional<NameMCUser> getNameMCUser(UUID uuid) {
         return Optional.ofNullable(users.get(uuid));
     }
     public void load(Database database, Logger logger) {
-        database.getNameMCUsers(logger).forEach(nameMCUser -> users.put(nameMCUser.getUniqueId(), nameMCUser));
+        for (NameMCUser user : database.getNameMCUsers(logger)) {
+            users.put(user.getUniqueId(), user);
+        }
     }
 }

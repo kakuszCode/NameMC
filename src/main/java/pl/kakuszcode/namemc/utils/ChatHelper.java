@@ -5,7 +5,12 @@ import org.bukkit.ChatColor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChatHelper {
+public final class ChatHelper {
+
+    private ChatHelper() {
+        throw new RuntimeException("Cannot invoke private constructor");
+    }
+
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
     public static String fixColor(String message){

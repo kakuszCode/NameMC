@@ -39,11 +39,7 @@ public class NameMCRequest {
 
                    @Override
                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        if (response.body().string().equalsIgnoreCase("true")) {
-                            future.complete(true);
-                            return;
-                        }
-                        future.complete(false);
+                        future.complete(response.body().string().equalsIgnoreCase("true"));
                    }
                });
         return future;
