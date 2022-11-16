@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface UUIDInterface {
-    final MojangAPIProvider mojangAPIProvider = new MojangAPIProvider();
+    MojangAPIProvider mojangAPIProvider = new MojangAPIProvider();
     static CompletableFuture<UUID> getUUIDPremiumByPlayer(Player p){
        try {
             Class.forName("pl.goxy.minecraft.api.GoxyApi");

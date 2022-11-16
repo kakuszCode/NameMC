@@ -13,6 +13,7 @@ import pl.kakuszcode.namemc.request.NameMCRequest;
 import pl.kakuszcode.namemc.user.service.UserService;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 public final class NameMC extends JavaPlugin {
@@ -37,23 +38,25 @@ public final class NameMC extends JavaPlugin {
             logger.severe("Błąd: " + e);
         }
         UserService userService = new UserService();
-        switch (configuration.getDatabaseEnum()) {
-            case H2:
-                database.connect(configuration.getH2Jdbc(),getLogger());
-                break;
-            case MYSQL:
-                database.connect(configuration.getMysqlJdbc() + ":" + configuration.getMysqlUsername() + ":" + configuration.getMysqlPassword(),getLogger());
-                break;
-            case MONGODB:
-                database.connect(configuration.getMongodbJdbc(),getLogger());
-                break;
-            case POSTGRESQL:
-                database.connect(configuration.getPostGreSQLJdbc() + ":" + configuration.getPostGreSQLUsername() + ":" + configuration.getPostGreSQLPassword(), getLogger());
-                break;
-        }
-        nameMCRequest = new NameMCRequest(configuration);
+        CompletableFuture.runAsync(() -> {
+            switch (configuration.getDatabaseEnum()) {
+                case H2:
+                    database.connect(configuration.getH2Jdbc(),getLogger());
+                    break;
+                case MYSQL:
+                    database.connect(configuration.getMysqlJdbc() + ":" + configuration.getMysqlUsername() + ":" + configuration.getMysqlPassword(),getLogger());
+                    break;
+                case MONGODB:
+                    database.connect(configuration.getMongodbJdbc(),getLogger());
+                    break;
+                case POSTGRESQL:
+                    database.connect(configuration.getPostGreSQLJdbc() + ":" + configuration.getPostGreSQLUsername() + ":" + configuration.getPostGreSQLPassword(), getLogger());
+                    break;
+            }
+        });
+        this.nameMCRequest = new NameMCRequest(configuration);
         userService.load(database, getLogger());
-        getCommand("namemc").setExecutor(new NameMCCommand(this, configuration, userService, nameMCRequest));
+        this.getCommand("namemc").setExecutor(new NameMCCommand(this, configuration, userService, nameMCRequest));
     }
 
     @Override

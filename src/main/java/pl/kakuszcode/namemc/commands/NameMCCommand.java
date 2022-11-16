@@ -53,17 +53,17 @@ public class NameMCCommand implements CommandExecutor {
                         if (!b) {
                             player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsNotLiked()));
                             return;
-
                         }
                         NameMCUser nameMCUser = new NameMCUser(player, uuid);
-                        plugin.getServer().getScheduler().runTask(plugin,
-                                () -> {
-                                    for (String s : configuration.getCommandsOnAccept()) {
-                                        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), s);
-                                    }
-                                    NameMCLikeEvent event = new NameMCLikeEvent(player, uuid);
-                                    plugin.getServer().getPluginManager().callEvent(event);
-                                });
+                        service.addNameMCUser(nameMCUser);
+                        plugin.getServer().getScheduler().runTask(plugin, () -> {
+                            for (String s : configuration.getCommandsOnAccept()) {
+                                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), s);
+                            }
+                            NameMCLikeEvent event = new NameMCLikeEvent(player, uuid);
+                            plugin.getServer().getPluginManager().callEvent(event);
+                        });
+
                         player.sendMessage(ChatHelper.fixColor(configuration.getMessageIsAccept()));
                     }).exceptionally(throwable -> {
                         plugin.getLogger().severe("Błąd: " + throwable);
