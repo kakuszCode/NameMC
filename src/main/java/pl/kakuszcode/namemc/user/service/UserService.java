@@ -28,6 +28,9 @@ public class UserService {
     public Optional<NameMCUser> getNameMCUser(UUID uuid) {
         return Optional.ofNullable(users.get(uuid));
     }
+    public void addNameMCUser(NameMCUser nameMCUser){
+        users.put(nameMCUser.getUniqueId(), nameMCUser);
+    }
     public void load(Database database, Logger logger) {
         for (NameMCUser user : database.getNameMCUsers(logger)) {
             users.put(user.getUniqueId(), user);
