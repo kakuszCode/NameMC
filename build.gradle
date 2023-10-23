@@ -23,7 +23,7 @@ dependencies {
     implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:4.0.7'
     implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:4.0.7'
     implementation 'org.postgresql:postgresql:42.5.0'
-    implementation 'com.h2database:h2:2.1.214'
+    implementation 'com.h2database:h2:2.2.224'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     compileOnly "pl.goxy.minecraft:goxy-api:0.6.0"
     compileOnly 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
